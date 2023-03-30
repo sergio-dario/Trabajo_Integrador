@@ -26,11 +26,13 @@ public class Main {
 		try {
 			listaResultados = new CsvToBeanBuilder(new FileReader(args[0]))     
 					   // Es necesario definir el tipo de dato que va a generar el objeto que estamos queriendo parsear a partir del CSV
+					.withSkipLines(1)
 					.withType(Resultado.class)
 					.build()
 					.parse();
 
 			listaPronosticos = new CsvToBeanBuilder(new FileReader(args[1]))                   
+					.withSkipLines(1)
 					.withType(Pronostico.class)
 					.build()
 					.parse();
@@ -40,25 +42,31 @@ public class Main {
 				String ganador;
 				String gana = "x";				
 				String empateEq1Eq2= "x";
-							
+						
 
+				
 				if(resultado.getGolesDelEquipo1() > resultado.getGolesDelEquipo2()) {
-					ganador = resultado.getEquipo1();					
+					ganador = resultado.getEquipo1();	
+					
+	
 					System.out.println("El ganador del partido es "+ ganador);
-
+					
 					for (Pronostico pronostico : listaPronosticos) {
 						if(pronostico.getGana1().equals(gana)) {
-							puntajeTotal++;							
+							puntajeTotal++;		
+							System.out.println(pronostico.getParticipante());
 						}
 					}	
 
 				} else if (resultado.getGolesDelEquipo1() < resultado.getGolesDelEquipo2()){
-					ganador = resultado.getEquipo2();    					
+					ganador = resultado.getEquipo2();
+			
 					System.out.println("El ganador del partido es "+ ganador);
 
 					for (Pronostico pronostico : listaPronosticos) {
 						if(pronostico.getGana2().equals(gana)) {
 							puntajeTotal++;
+							
 						}
 					}
 					
@@ -67,7 +75,8 @@ public class Main {
 
 					for (Pronostico pronostico : listaPronosticos) {
 						if(pronostico.getEmpata().equals(empateEq1Eq2)) {
-							puntajeTotal++;							       			
+							puntajeTotal++;		
+							
 						}
 					}
 				}		
